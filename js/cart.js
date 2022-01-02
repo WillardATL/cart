@@ -1,19 +1,20 @@
-// создаем массив с товарами и каждому товару присваиваем наименование и цену
+// create the price-list
 let items = [
-    {name: "Galmar-MZ", price: 1800},
-	{name: "Galmar-Mini", price: 3200},
-	{name: "Galmar-Standart", price: 6000},
-	{name: "Galmar-MAX", price: 11200},
+    {name: "Good Mood", price: 1},
+	{name: "Happy Time", price: 1},
+	{name: "Factor Happy", price: 1},
+	{name: "Summer Vibes", price: 1},
 ]
 
-// находим в верстке наши товары по id с определенным индексом и записываем туда значения из массива - название и цену
+// transfer data from the price list to the HTML layout
 for (var i=0; i < items.length; i++) {
 	index = i+1;
 	document.getElementById("item-" + index + "-name").innerHTML = items[i].name;
 	document.getElementById("item-" + index + "-price").innerHTML = items[i].price + " USD";
 }
 
-//находим все кнопки Купить и вешаем на каждую слушатель кликов
+//adding and removing items to the cart
+
   var addToCartButtons = document.getElementsByClassName('btn-addToCart')
   for (var i = 0; i < addToCartButtons.length; i++) {
      	var button = addToCartButtons[i]
@@ -25,11 +26,13 @@ function addToCartClicked(event) {
     var index = parseInt(button.id.match(/\d+/))-1; //получаем id нажатой кнопки, извлекаем число из названия класса и получаем индекс, соответсвуюший ключу товара в массиве items
     var itemName = items[index].name;
     var itemPrice = items[index].price;
-    addItemToCart(itemName, itemPrice)
+    var item = button.parentElement;
+    var imageSrc = item.getElementsByClassName('item__img')[0].src;
+    addItemToCart(itemName, itemPrice, imageSrc)
     updateCartTotal()
 }
 
-function addItemToCart(itemName, itemPrice) {
+function addItemToCart(itemName, itemPrice, imageSrc) {
     var cartRow = document.createElement('div');
     cartRow.classList.add('cart__item');
     cartRow.classList.add('grid-row');
@@ -42,6 +45,7 @@ function addItemToCart(itemName, itemPrice) {
         }
     }
     var cartRowContents = `
+    <img class="cart-item-image" src="${imageSrc}" width="80" height="80">
         <p class="cart__item-name">${itemName}</p>
         <p class="cart__item-price">${itemPrice + " USD"}</p>
         <div class="cart__item-quantity flex-row">
@@ -52,6 +56,7 @@ function addItemToCart(itemName, itemPrice) {
     cartItems.append(cartRow)
     cartRow.querySelector('.btn-delete').addEventListener('click', removeCartItem)
     cartRow.querySelector('.cart__item-quantity-input').addEventListener('change', quantityChanged)
+    emptyCartCheck ()
 }
 
 var removeFromCartButtons = document.getElementsByClassName("btn-delete")
@@ -64,6 +69,7 @@ function removeCartItem(event) {
     var buttonClicked = event.target
     buttonClicked.parentElement.parentElement.remove()
     updateCartTotal()
+    emptyCartCheck ()
 }
 
 function updateCartTotal() {
@@ -94,4 +100,25 @@ function quantityChanged(event) {
         input.value = 1
     }
     updateCartTotal()
+}
+
+document.getElementById("btnPurchase").addEventListener('click', purchaseClicked)
+
+function purchaseClicked() {
+    alert('Thank you for your purchase')
+    var cartItems = document.getElementsByClassName('cart__items')[0]
+    while (cartItems.hasChildNodes()) {
+        cartItems.removeChild(cartItems.firstChild)
+    }
+    updateCartTotal()
+    emptyCartCheck ()
+}
+
+function emptyCartCheck () {
+    var emptyCart = document.getElementsByClassName("cart__item");
+if (emptyCart.length == 0) {
+    document.getElementById("btnPurchase").disabled=true;
+} else {
+    document.getElementById("btnPurchase").disabled=false;
+    }
 }

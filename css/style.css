@@ -61,6 +61,15 @@ body {
           flex-direction: row;
 }
 
+.grid-row {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-rows: auto;
+      grid-template-rows: auto;
+  -ms-grid-columns: 100px 150px 100px 100px;
+      grid-template-columns: 100px 150px 100px 100px;
+}
+
 .items-table {
   gap: 20px;
   -webkit-box-align: center;
@@ -126,8 +135,8 @@ body {
 }
 
 .cart {
-  width: 600px;
-  padding: 50px;
+  width: 500px;
+  padding: 25px;
   background-color: #eff0f4;
   -webkit-border-radius: 30px;
           border-radius: 30px;
@@ -138,23 +147,22 @@ body {
   border-bottom: 1px solid #cacaca;
 }
 
-.grid-row {
-  display: -ms-grid;
-  display: grid;
-  -ms-grid-rows: 50px;
-      grid-template-rows: 50px;
-  -ms-grid-columns: 300px 100px 100px;
-      grid-template-columns: 300px 100px 100px;
-}
-
 .cart__header {
   text-align: center;
+  font-weight: 600;
   -webkit-box-align: center;
   -webkit-align-items: center;
       -ms-flex-align: center;
           align-items: center;
   text-transform: uppercase;
   border-bottom: 1px solid #cacaca;
+  padding: 10px 0;
+}
+
+.cart__header-text:first-child {
+  -ms-grid-column: 1;
+      grid-column-start: 1;
+  grid-column-end: 3;
 }
 
 .cart__item {
@@ -162,6 +170,7 @@ body {
   -webkit-align-items: center;
       -ms-flex-align: center;
           align-items: center;
+  margin: 10px 0;
 }
 
 .cart__item-price {
@@ -226,4 +235,34 @@ body {
           border-radius: 6px;
   background-color: #E87907;
   color: #fff;
+}
+
+.cart__button:disabled {
+  background-color: #9e9e9e;
+}
+
+@media screen and (max-width: 500px) {
+  .grid-row {
+    -ms-grid-columns: auto 80px 80px;
+        grid-template-columns: auto 80px 80px;
+  }
+  .cart {
+    width: 100%;
+    -webkit-border-radius: 0px;
+            border-radius: 0px;
+  }
+  .cart__header-text:first-child {
+    -ms-grid-column: 1;
+        grid-column-start: 1;
+    grid-column-end: 2;
+  }
+  .cart-item-image {
+    display: none;
+  }
+  .cart__item-quantity {
+    gap: 10px;
+  }
+  .cart__item-quantity-input {
+    width: 40px;
+  }
 }
